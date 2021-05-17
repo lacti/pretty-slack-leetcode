@@ -1,4 +1,6 @@
-node_modules
-data
-output
-output.html
+/node_modules
+/data
+/output
+!/output/stylesheets
+/site
+/.envrc

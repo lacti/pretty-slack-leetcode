@@ -1,0 +1,13 @@
+@media screen and (max-width: 44.9375em) {
+  .md-typeset > pre {
+    margin: 1em 0;
+  }
+}
+
+.md-typeset > pre {
+  white-space: pre-wrap;
+}
+.md-typeset > .highlight code {
+  border-radius: 0;
+  white-space: pre-wrap;
+}

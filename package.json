@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "ts-node src/main.ts",
-    "poststart": "pandoc output/*.md -f gfm -s --css output.css -o output.html"
+    "pandoc": "pandoc output/*.md -f gfm -s --css output.css -o output.html"
   },
   "devDependencies": {
     "@types/node": "14",

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+[ ! -z "$(type -t source_up)" ] && source_up
+
+export DOMAIN="awesome.domain"
+export SUB_DOMAIN="subdomain"
+export STACK_NAME="your-cloudformation-stack-name"
+export BUCKET_NAME="${SUB_DOMAIN}.${DOMAIN}"
+export CERTIFICATE_ARN="us-east-1-acm-certificate-arn"
+export DISTRIBUTION_ID="cloudfront-distribution-id"
+
+# export URL_PREFIX="/"         # to deploy as root
+# export URL_PREFIX="/foo/bar"  # for arbitrary path
+
+# export TARGET=""          # for all
+# export TARGET="username"  # for specific user
+

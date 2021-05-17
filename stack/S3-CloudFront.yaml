@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  BucketName:
+    Type: String
+  CertificateArn:
+    Type: String
+  Domain:
+    Type: String
+  SubDomain:
+    Type: String
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref BucketName
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DependsOn: S3Bucket
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+        - Action: s3:GetObject
+          Effect: Allow
+          Resource: !Join ['', ['arn:aws:s3:::', !Ref BucketName, /*]]
+          Principal: '*'
+  CDN:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        Origins:
+          - Id: S3Origin
+            DomainName: !Select [2, !Split ["/", !GetAtt S3Bucket.WebsiteURL]]
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: http-only
+        DefaultCacheBehavior:
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+        Aliases:
+          - !Join ['', [!Ref SubDomain, '.', !Ref Domain]]
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          MinimumProtocolVersion: TLSv1
+          SslSupportMethod: sni-only
+        HttpVersion: http2
+  CNDDns:
+    Type: AWS::Route53::RecordSet
+    DependsOn: CDN
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt CDN.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+      HostedZoneName: !Join ['', [!Ref Domain, '.']]
+      Name: !Join ['', [!Ref SubDomain, '.', !Ref Domain]]
+      Type: A

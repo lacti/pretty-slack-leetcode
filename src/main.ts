@@ -1,3 +1,4 @@
+import SolvedFile from "./models/SolvedFile";
 import cacheOrFetchLeetcode from "./leetcode/fetch/cacheOrFetchLeetcode";
 import debugPrint from "./utils/debugPrint";
 import isSolution from "./utils/isSolution";
@@ -5,6 +6,7 @@ import loadSlackMessages from "./slack/fetch/loadSlackMessages";
 import loadSlackUsers from "./slack/fetch/loadSlackUsers";
 import parseSlackTimestamp from "./slack/utils/parseSlackTimestamp";
 import trimSolution from "./utils/trimSolution";
+import writeIndex from "./writeIndex";
 import writeSolved from "./writeSolved";
 
 const leetcodeUrlPrefix = "https://leetcode.com/problems";
@@ -24,6 +26,7 @@ async function main({
     : null;
   debugPrint({ targetUsers });
 
+  const files: SolvedFile[] = [];
   for (const { text, replies, ts } of Object.values(msgs).filter(
     (m) => m.text && m.text.includes(leetcodeUrlPrefix)
   )) {
@@ -44,7 +47,7 @@ async function main({
       const replyMsgs = replies.map((r) => msgs[r.ts]).filter(Boolean);
       debugPrint(problemUrl, replies.length, replies.length);
 
-      writeSolved({
+      const filePath = writeSolved({
         title: q.title,
         slug: q.titleSlug,
         url: `${leetcodeUrlPrefix}/${q.titleSlug}/`,
@@ -65,8 +68,10 @@ async function main({
               targetUsers === null || targetUsers.includes(name.toLowerCase())
           ),
       });
+      files.push({ difficulty: q.difficulty, title: q.title, filePath });
     }
   }
+  writeIndex(files);
 }
 
 if (require.main === module) {

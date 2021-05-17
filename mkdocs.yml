@@ -1,0 +1,17 @@
+site_name: Leetcode
+docs_dir: output
+
+theme:
+  name: material
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - plantuml_markdown:
+      server: http://www.plantuml.com/plantuml
+  - toc:
+      permalink: true
+      slugify: !!python/name:pymdownx.slugs.uslugify
+  - pymdownx.highlight
+  - pymdownx.superfences
+
