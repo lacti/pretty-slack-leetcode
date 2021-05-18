@@ -2,6 +2,12 @@
 
 set -euxo pipefail
 
+USER_NAME="${1:-""}"
+if [ -z "${USER_NAME}" ]; then
+  echo "$0 username"
+  exit 0
+fi
+
 if [ -z "${BUCKET_NAME}" ]; then
   echo "Please set env first"
   exit 1
@@ -12,14 +18,18 @@ if [ -z "$(which mkdocs)" ]; then
   exit 1
 fi
 
-echo "Run with target [${TARGET}]"
-echo "Upload to ${BUCKET_NAME}${URL_PREFIX}"
+echo "Run with target [${USER_NAME}]"
 
-yarn start "${TARGET}"
+URL_PREFIX="${URL_PREFIX:-"/"}"
+echo "Upload to ${BUCKET_NAME}${URL_PREFIX}/${USER_NAME}"
+
+yarn start "${USER_NAME}"
 mkdocs build
-aws s3 sync site "s3://${BUCKET_NAME}${URL_PREFIX}"
+aws s3 sync site "s3://${BUCKET_NAME}${URL_PREFIX}/${USER_NAME}"
 
 if [ ! -z "${DISTRIBUTION_ID}" ]; then
-  aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "${URL_PREFIX}/*"
+  aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "${URL_PREFIX}/${USER_NAME}/*"
 fi
+
+echo "All done: https://${SUB_DOMAIN}.${DOMAIN}${URL_PREFIX}/${USER_NAME}"
 

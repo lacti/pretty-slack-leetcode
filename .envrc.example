@@ -12,6 +12,3 @@ export DISTRIBUTION_ID="cloudfront-distribution-id"
 # export URL_PREFIX="/"         # to deploy as root
 # export URL_PREFIX="/foo/bar"  # for arbitrary path
 
-# export TARGET=""          # for all
-# export TARGET="username"  # for specific user
-
