@@ -9,8 +9,11 @@
     "email": "lactrious@gmail.com"
   },
   "scripts": {
+    "prestart": "rm -rf output/Easy output/Hard output/Medium",
     "start": "ts-node src/main.ts",
-    "pandoc": "pandoc output/*.md -f gfm -s --css output.css -o output.html"
+    "prebuild": "rm -rf site",
+    "build": "mkdocs build",
+    "deploy": "bash sync.sh"
   },
   "devDependencies": {
     "@types/node": "14",
