@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 
 import Solved from "./models/Solved";
-import dateFnsFormat from "date-fns/format";
 import filenamify from "filenamify";
 import outputRoot from "./env/outputRoot";
 import renderSolved from "./renderSolved";
@@ -13,8 +12,7 @@ export default function writeSolved(sol: Solved): string {
     fs.mkdirSync(documentPath, { recursive: true });
   }
 
-  const fileName =
-    filenamify(`${sol.slug}-${dateFnsFormat(sol.started, "yyyyMMdd")}`) + ".md";
+  const fileName = filenamify(sol.slug) + ".md";
   const outputFile = path.join(documentPath, fileName);
   if (sol.solutions.length === 0) {
     if (fs.existsSync(outputFile)) {

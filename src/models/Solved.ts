@@ -5,7 +5,7 @@ export default interface Solved {
   slug: string;
   url: string;
 
-  started: number;
+  started: number[];
   content: string;
   difficulty: string;
   likes: number;

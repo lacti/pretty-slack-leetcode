@@ -8,7 +8,10 @@ export default function renderSolved(sol: Solved): string {
     [
       `- <${sol.url}>`,
       `- ${sol.difficulty} / ${sol.likes} likes / ${sol.dislikes} dislikes`,
-      `- Started at ${dateFnsFormat(sol.started, "yyyy-MM-dd HH:mm:ss")}`,
+      ...sol.started.map(
+        (started) =>
+          `- Started at ${dateFnsFormat(started, "yyyy-MM-dd HH:mm:ss")}`
+      ),
     ].join("\n"),
     sol.content,
     ...sol.solutions.flatMap(({ name, solution, solved }) => [
