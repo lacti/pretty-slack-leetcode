@@ -21,12 +21,12 @@ for USER_NAME in "$@"; do
   echo "Run with target [${USER_NAME}]"
 
   URL_PREFIX="${URL_PREFIX:-"/"}"
-  echo "Upload to ${BUCKET_NAME}${URL_PREFIX}/${USER_NAME}"
+  echo "Upload to ${BUCKET_NAME}${URL_PREFIX}/${USER_NAME,,}"
 
   yarn start "${USER_NAME}" && yarn build
-  aws s3 sync --delete site "s3://${BUCKET_NAME}${URL_PREFIX}/${USER_NAME}"
+  aws s3 sync --delete site "s3://${BUCKET_NAME}${URL_PREFIX}/${USER_NAME,,}"
 
-  echo "All done: https://${SUB_DOMAIN}.${DOMAIN}${URL_PREFIX}/${USER_NAME}"
+  echo "All done: https://${SUB_DOMAIN}.${DOMAIN}${URL_PREFIX}/${USER_NAME,,}"
 done
 
 if [ ! -z "${DISTRIBUTION_ID}" ]; then
