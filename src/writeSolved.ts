@@ -12,7 +12,8 @@ export default function writeSolved(sol: Solved): string {
     fs.mkdirSync(documentPath, { recursive: true });
   }
 
-  const fileName = filenamify(sol.slug) + ".md";
+  const fileName =
+    ("0000" + sol.id).slice(-4) + "-" + filenamify(sol.slug) + ".md";
   const outputFile = path.join(documentPath, fileName);
   if (sol.solutions.length === 0) {
     if (fs.existsSync(outputFile)) {

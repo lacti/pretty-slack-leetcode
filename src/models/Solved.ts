@@ -1,6 +1,7 @@
 import Solution from "./Solution";
 
 export default interface Solved {
+  id: number;
   title: string;
   slug: string;
   url: string;
