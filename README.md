@@ -9,7 +9,7 @@ Make Leetcode solutions as pretty from Slack threads!
 
 ## Quick start
 
-First, download Slack export data and dump them into `data/slack` directory, and,
+First, download Slack export data and dump them into `data/slack_yyyyMMdd` directory, and,
 
 ```bash
 yarn
