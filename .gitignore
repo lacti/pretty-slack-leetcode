@@ -4,3 +4,4 @@
 !/output/stylesheets
 /site
 /.envrc
+/sync*.sh
